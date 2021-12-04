@@ -7,10 +7,21 @@
 ### Instructions
 
 #1. Create a query or queries to extract the information you think may be relevant for building the prediction model. It should include some film features and some rental features.
-SELECT a.film_id, a.release_year, a.language_id, a.original_language_id, a.rental_duration, a.rental_rate, a.replacement_cost, a.rating, d.amount
+/*Old query*/
+SELECT a.film_id, a.title, e.name AS category, a.release_year, a.language_id, a.rental_duration, a.rental_rate, a.replacement_cost, a.rating 
 FROM sakila.film AS a LEFT JOIN sakila.inventory AS b ON a.film_id=b.film_id
 JOIN sakila.rental AS c ON b.inventory_id = c.inventory_id
-JOIN sakila.payment AS d ON c.rental_id=d.rental_id;
+JOIN sakila.film_category AS d ON a.film_id=d.film_id
+JOIN sakila.category AS e ON d.category_id=e.category_id
+ORDER BY a.film_id;
+
+
+SELECT c.rental_id, b.inventory_id, a.film_id, e.name AS category, a.release_year, a.language_id, a.rental_duration, a.rental_rate, a.replacement_cost, a.rating 
+FROM sakila.film AS a LEFT JOIN sakila.inventory AS b ON a.film_id=b.film_id
+JOIN sakila.rental AS c ON b.inventory_id = c.inventory_id
+JOIN sakila.film_category AS d ON a.film_id=d.film_id
+JOIN sakila.category AS e ON d.category_id=e.category_id
+ORDER BY a.film_id;
 
 #2. Read the data into a Pandas dataframe.
 #3. Analyze extracted features and transform them. You may need to encode some categorical variables, or scale numerical variables.
@@ -37,9 +48,11 @@ RANK() OVER(ORDER BY YEAR(c.rental_date) DESC, MONTH(c.rental_date) DESC) AS ran
 FROM sakila.film AS a LEFT JOIN sakila.inventory AS b ON a.film_id=b.film_id
 JOIN sakila.rental AS c ON b.inventory_id=c.inventory_id
 )
-SELECT film_id,
+SELECT
 IF (rank_months = 1,True,False) AS rented_last_month
-FROM cte1;
+FROM cte1
+/*GROUP BY film_id*/
+ORDER BY film_id;
 
 
 #5. Create a logistic regression model to predict this variable from the cleaned data.
