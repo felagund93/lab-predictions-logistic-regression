@@ -16,11 +16,12 @@ JOIN sakila.category AS e ON d.category_id=e.category_id
 ORDER BY a.film_id;
 
 
-SELECT c.rental_id, b.inventory_id, a.film_id, e.name AS category, a.release_year, a.language_id, a.rental_duration, a.rental_rate, a.replacement_cost, a.rating 
+SELECT c.rental_id, b.inventory_id, a.film_id, e.name AS category, a.rental_duration, a.rental_rate, a.replacement_cost, a.rating 
 FROM sakila.film AS a LEFT JOIN sakila.inventory AS b ON a.film_id=b.film_id
 JOIN sakila.rental AS c ON b.inventory_id = c.inventory_id
 JOIN sakila.film_category AS d ON a.film_id=d.film_id
 JOIN sakila.category AS e ON d.category_id=e.category_id
+/*GROUP BY a.film_id*/
 ORDER BY a.film_id;
 
 #2. Read the data into a Pandas dataframe.
@@ -51,7 +52,7 @@ JOIN sakila.rental AS c ON b.inventory_id=c.inventory_id
 SELECT
 IF (rank_months = 1,True,False) AS rented_last_month
 FROM cte1
-/*GROUP BY film_id*/
+GROUP BY film_id
 ORDER BY film_id;
 
 
